@@ -1,0 +1,22 @@
+STDOUT:
+Datasource "db": PostgreSQL database "diyamgaz", schema "public" at "localhost:5432"
+
+
+
+STDERR:
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Error: P1000: Authentication failed against database server, the provided database credentials for `(not available)` are not valid.
+
+Please make sure to provide valid database credentials for the database server at the configured address.
+
+
+ERROR:
+Command failed: npx prisma db push
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Error: P1000: Authentication failed against database server, the provided database credentials for `(not available)` are not valid.
+
+Please make sure to provide valid database credentials for the database server at the configured address.
