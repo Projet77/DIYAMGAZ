@@ -22,19 +22,24 @@ const ProductCard = ({ product }) => {
         setTimeout(() => setAdded(false), 2000); // Reset after 2s for demo
     };
 
-    // Determine premium AI image based on category fallback
-    let displayImage = product.image;
-    if (!displayImage || displayImage.includes('unsplash')) {
-        if (product.category === 'GAZ') displayImage = '/premium_gas_bottle_senegal_1772229211062.png';
-        if (product.category === 'EAU') displayImage = '/premium_water_bottle_1772227577044.png';
-        if (product.category === 'CHARBON') displayImage = '/premium_charcoal_1772227593891.png';
+    // Determine image from backend or default fallback
+    let displayImage = '/images/Placeholder.png';
+
+    if (product.photos && product.photos.length > 0) {
+        displayImage = `http://localhost:5000${product.photos[0]}`;
+    } else if (product.category === 'GAZ') {
+        displayImage = '/premium_gas_bottle_senegal_1772229211062.png';
+    } else if (product.category === 'EAU') {
+        displayImage = '/premium_water_bottle_1772227577044.png';
+    } else if (product.category === 'CHARBON') {
+        displayImage = '/premium_charcoal_1772227593891.png';
     }
 
     return (
         <div className="product-card slide-up">
             <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="product-image-container">
-                    <img src={displayImage} alt={product.title} className="product-image" />
+                    <img src={displayImage} alt={product.title} className="product-image" style={{ mixBlendMode: 'multiply' }} />
                 </div>
             </Link>
             <div className="product-info">

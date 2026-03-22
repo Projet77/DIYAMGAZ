@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { ShoppingCart } from 'lucide-react'; // icone ajoutée
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -19,6 +20,11 @@ const ProductDetail = () => {
                 const result = await response.json();
                 const foundProduct = result.data.find(p => p.id === parseInt(id));
                 setProduct(foundProduct);
+
+                // Incrémenter les vues silencieusement
+                if (foundProduct) {
+                    fetch(`http://localhost:5000/api/products/${id}/views`, { method: 'PUT' }).catch(() => { });
+                }
             } catch (error) {
                 console.error('Error fetching product details:', error);
             } finally {
@@ -40,53 +46,107 @@ const ProductDetail = () => {
         setTimeout(() => setAdded(false), 2000);
     };
 
-    // Determine premium AI image based on category
-    let displayImage = product.image;
-    if (!displayImage || displayImage.includes('unsplash')) {
-        if (product.category === 'GAZ') displayImage = '/premium_gas_bottle_senegal_1772229211062.png';
-        if (product.category === 'EAU') displayImage = '/premium_water_bottle_1772227577044.png';
-        if (product.category === 'CHARBON') displayImage = '/premium_charcoal_1772227593891.png';
+    // Determine image from backend or fallback to category defaults
+    let displayImage = '/images/Placeholder.png';
+
+    if (product.photos && product.photos.length > 0) {
+        displayImage = `http://localhost:5000${product.photos[0]}`;
+    } else if (product.category === 'GAZ') {
+        displayImage = '/premium_gas_bottle_senegal_1772229211062.png';
+    } else if (product.category === 'EAU') {
+        displayImage = '/premium_water_bottle_1772227577044.png';
+    } else if (product.category === 'CHARBON') {
+        displayImage = '/premium_charcoal_1772227593891.png';
     }
 
     return (
-        <div className="fade-in" style={{ padding: '40px 0 80px' }}>
-            <div className="hero" style={{ marginBottom: '20px', gridTemplateColumns: '1fr', padding: '0' }}>
-                <Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', marginBottom: '20px', display: 'inline-block' }}>
-                    ← Retour à la boutique
+        <div className="fade-in" style={{ padding: '40px 20px 80px', maxWidth: '1200px', margin: '0 auto' }}>
+            <div style={{ marginBottom: '30px' }}>
+                <Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: '500', transition: 'var(--transition-fast)' }} onMouseEnter={(e) => e.target.style.color = 'var(--text-main)'} onMouseLeave={(e) => e.target.style.color = 'var(--text-muted)'}>
+                    <span style={{ fontSize: '18px' }}>←</span> Retour à la boutique
                 </Link>
             </div>
 
-            <div className="hero">
-                <div className="hero-visual fade-up" style={{ minHeight: '500px', padding: '40px' }}>
-                    <img style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.5))', maxWidth: '80%', maxHeight: '400px', objectFit: 'contain' }} src={displayImage} alt={product.title} className="floating" />
+            <div className="bento-card fade-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '0', overflow: 'hidden', padding: 0 }}>
+                {/* Visual Section */}
+                <div style={{ background: 'var(--bg-tertiary)', padding: '60px 40px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '500px' }}>
+                    <img
+                        style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))', mixBlendMode: 'multiply', maxWidth: '100%', maxHeight: '450px', objectFit: 'contain' }}
+                        src={displayImage}
+                        alt={product.title}
+                        className="floating"
+                    />
                 </div>
 
-                <div className="hero-main fade-up delay-1">
-                    <div className="hero-content">
-                        <span style={{ color: 'var(--primary-color)', fontWeight: '600', letterSpacing: '1px', fontSize: '14px', textTransform: 'uppercase' }}>{product.category}</span>
-                        <h2 style={{ fontSize: '48px', marginTop: '16px', marginBottom: '24px' }}>{product.title}</h2>
-                        <div style={{ fontSize: '32px', fontWeight: '700', color: 'var(--text-main)', marginBottom: '32px' }}>
-                            {product.price} FCFA
+                {/* Content Section */}
+                <div style={{ padding: '60px 40px', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)' }}>
+                    <div style={{ marginBottom: 'auto' }}>
+                        <span style={{ display: 'inline-block', background: 'var(--primary-gradient)', color: 'white', fontWeight: '600', letterSpacing: '1px', fontSize: '12px', textTransform: 'uppercase', padding: '6px 12px', borderRadius: '100px', marginBottom: '24px' }}>
+                            {product.category}
+                        </span>
+
+                        <h1 style={{ fontSize: '42px', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 16px 0', lineHeight: '1.1', letterSpacing: '-1px' }}>
+                            {product.title}
+                        </h1>
+
+                        <div style={{ fontSize: '36px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '32px', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                            {product.price} <span style={{ fontSize: '18px', color: 'var(--text-muted)', fontWeight: '600' }}>FCFA</span>
                         </div>
 
-                        <p className="description" style={{ marginBottom: '40px' }}>
-                            {product.description} Ce produit est livré avec le plus grand soin par les équipes de DIYAMGAZ directement à votre domicile dans les plus brefs délais. Profitez d'une qualité premium.
+                        <p style={{ fontSize: '16px', lineHeight: '1.6', color: 'var(--text-muted)', marginBottom: '40px' }}>
+                            {product.description}
+                            <br /><br />
+                            Ce produit est livré avec le plus grand soin par les équipes de <strong>DIYAMGAZ</strong> directement à votre domicile dans les plus brefs délais. Profitez d'une qualité premium et d'un service client à votre écoute.
                         </p>
+                    </div>
 
-                        <div className="action-row" style={{ display: 'flex', gap: '20px', alignItems: 'center', marginTop: 'auto' }}>
-                            <div className="quantity-selector" style={{ height: '56px', padding: '0 10px' }}>
-                                <button onClick={decrement} className="qty-btn" style={{ fontSize: '24px' }}>-</button>
-                                <span className="qty-value" style={{ fontSize: '18px', padding: '0 20px' }}>{quantity}</span>
-                                <button onClick={increment} className="qty-btn" style={{ fontSize: '24px' }}>+</button>
+                    <div style={{ background: 'white', padding: '24px', borderRadius: '16px', border: '1px solid var(--bento-border)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>Quantité</span>
+                            <div style={{ display: 'flex', alignItems: 'center', background: 'var(--bg-tertiary)', borderRadius: '12px', padding: '4px' }}>
+                                <button onClick={decrement} style={{ width: '36px', height: '36px', borderRadius: '8px', border: 'none', background: 'white', color: 'var(--text-main)', fontSize: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--bento-shadow)' }}>-</button>
+                                <span style={{ width: '40px', textAlign: 'center', fontWeight: '600', fontSize: '16px' }}>{quantity}</span>
+                                <button onClick={increment} style={{ width: '36px', height: '36px', borderRadius: '8px', border: 'none', background: 'white', color: 'var(--text-main)', fontSize: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--bento-shadow)' }}>+</button>
                             </div>
+                        </div>
 
+                        <div style={{ display: 'flex', gap: '12px' }}>
                             <button
                                 onClick={handleBuy}
-                                className={`buy-btn ${added ? 'added' : ''}`}
-                                style={{ height: '56px', fontSize: '18px', flexGrow: '1' }}
+                                style={{
+                                    flex: 2, padding: '16px', borderRadius: '12px', border: 'none',
+                                    background: added ? '#10b981' : 'var(--text-main)', color: 'white',
+                                    fontSize: '16px', fontWeight: '600', cursor: 'pointer',
+                                    transition: 'var(--transition-fast)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                                    boxShadow: added ? '0 10px 25px rgba(16, 185, 129, 0.4)' : '0 10px 25px rgba(0, 0, 0, 0.2)'
+                                }}
+                                onMouseEnter={(e) => { if (!added) e.currentTarget.style.transform = 'translateY(-2px)' }}
+                                onMouseLeave={(e) => { if (!added) e.currentTarget.style.transform = 'translateY(0)' }}
                             >
-                                {added ? 'Ajouté au panier ✓' : 'Ajouter au panier'}
+                                {added ? '✓ Ajouté au panier' : <><ShoppingCart size={20} /> Ajouter {quantity} au panier - {(product.price * quantity).toLocaleString()} FCFA</>}
                             </button>
+
+                            <a
+                                href={`https://wa.me/221711425492?text=Bonjour,%20je%20souhaite%20commander%20${quantity}%20x%20${encodeURIComponent(product.title)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    flex: 1, padding: '16px', borderRadius: '12px', background: '#25D366', color: 'white',
+                                    textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                                    fontSize: '15px', fontWeight: '600', transition: 'var(--transition-fast)',
+                                    boxShadow: '0 10px 25px rgba(37, 211, 102, 0.3)'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                WhatsApp
+                            </a>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
+                            En stock et prêt à être expédié
                         </div>
                     </div>
                 </div>

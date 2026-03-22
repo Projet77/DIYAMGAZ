@@ -18,8 +18,18 @@ model Product {
   quantity    Int      @default(0)
   category    String
   photos      String?  // Store as JSON string or string array
+  views       Int      @default(0) // New field for tracking popularity
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  inventoryLogs InventoryLog[] // Relation for tracking stock changes
+}
+
+model InventoryLog {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      // The new absolute quantity of the product at this time
+  createdAt DateTime @default(now())
 }
 
 model Order {

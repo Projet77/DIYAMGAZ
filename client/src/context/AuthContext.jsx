@@ -37,10 +37,12 @@ export const AuthProvider = ({ children }) => {
 
     // A simple abstraction for authenticated fetch requests
     const authFetch = async (url, options = {}) => {
-        const headers = {
-            'Content-Type': 'application/json',
-            ...options.headers,
-        };
+        const headers = { ...options.headers };
+
+        // Do not force JSON content-type if we are sending FormData (for file uploads)
+        if (!(options.body instanceof FormData)) {
+            headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+        }
 
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;

@@ -21,6 +21,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/auth', authRoutes);
+app.use('/api/users', require('./routes/users.js'));
+app.use('/api/stats', require('./routes/stats.js'));
 
 // Basic health check
 app.get('/', (req, res) => {

@@ -20,10 +20,10 @@ const Home = () => {
         : products.filter(p => p.category === activeTab);
 
     const heroImages = [
-        { src: '/public/premium_gas_bottle_senegal_1772229211062.png' },
-        { src: '/public/propos.png' },
-        { src: '/public/propos2.png' },
-        { src: '/public/propos3.png' }
+        { src: '/premium_gas_bottle_senegal_1772229211062.png' },
+        { src: '/propos.png' },
+        { src: '/propos2.png' },
+        { src: '/propos3.png' }
     ];
 
     return (
