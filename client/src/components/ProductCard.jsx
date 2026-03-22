@@ -26,7 +26,7 @@ const ProductCard = ({ product }) => {
     let displayImage = '/images/Placeholder.png';
 
     if (product.photos && product.photos.length > 0) {
-        displayImage = `http://localhost:5000${product.photos[0]}`;
+        displayImage = `https://diyamgaz.onrender.com${product.photos[0]}`;
     } else if (product.category === 'GAZ') {
         displayImage = '/premium_gas_bottle_senegal_1772229211062.png';
     } else if (product.category === 'EAU') {

@@ -37,9 +37,9 @@ const AdminDashboard = () => {
     const fetchData = async () => {
         try {
             const [prodRes, statsRes, usersRes] = await Promise.all([
-                fetch('http://localhost:5000/api/products'),
-                authFetch(`http://localhost:5000/api/stats?period=${statsPeriod}`),
-                authFetch('http://localhost:5000/api/users')
+                fetch('https://diyamgaz.onrender.com/api/products'),
+                authFetch(`https://diyamgaz.onrender.com/api/stats?period=${statsPeriod}`),
+                authFetch('https://diyamgaz.onrender.com/api/users')
             ]);
 
             const prodData = await prodRes.json();
@@ -57,7 +57,7 @@ const AdminDashboard = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/products');
+            const response = await fetch('https://diyamgaz.onrender.com/api/products');
             const result = await response.json();
             setProducts(result.data || []);
         } catch (error) {
@@ -143,8 +143,8 @@ const AdminDashboard = () => {
 
         try {
             const url = editingProductId
-                ? `http://localhost:5000/api/products/${editingProductId}`
-                : 'http://localhost:5000/api/products';
+                ? `https://diyamgaz.onrender.com/api/products/${editingProductId}`
+                : 'https://diyamgaz.onrender.com/api/products';
 
             const method = editingProductId ? 'PUT' : 'POST';
 
@@ -173,7 +173,7 @@ const AdminDashboard = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Voulez-vous vraiment supprimer ce produit ?')) return;
         try {
-            const response = await authFetch(`http://localhost:5000/api/products/${id}`, {
+            const response = await authFetch(`https://diyamgaz.onrender.com/api/products/${id}`, {
                 method: 'DELETE'
             });
             if (response.ok) {
@@ -560,7 +560,7 @@ const AdminDashboard = () => {
                                                             <td>
                                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                                                     <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: '#f8fafc', padding: '4px', border: '1px solid #e2e8f0' }}>
-                                                                        <img src={product.photos && product.photos.length > 0 ? `http://localhost:5000${product.photos[0]}` : '/images/Placeholder.png'} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }} />
+                                                                        <img src={product.photos && product.photos.length > 0 ? `https://diyamgaz.onrender.com${product.photos[0]}` : '/images/Placeholder.png'} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }} />
                                                                     </div>
                                                                     <div>
                                                                         <div style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '14px' }}>{product.title}</div>

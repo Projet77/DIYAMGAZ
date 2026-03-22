@@ -9,7 +9,7 @@ const Home = () => {
     const [activeTab, setActiveTab] = useState('TOUS');
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/products')
+        fetch('https://diyamgaz.onrender.com/api/products')
             .then(res => res.json())
             .then(data => setProducts(data.data || []))
             .catch(err => console.error('Erreur de chargement', err));

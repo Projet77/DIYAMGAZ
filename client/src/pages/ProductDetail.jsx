@@ -16,14 +16,14 @@ const ProductDetail = () => {
             try {
                 // To support a real detail fetch, the backend should ideally have a single product endpoint.
                 // Fetching all for simplicity in this demo and finding the correct one.
-                const response = await fetch('http://localhost:5000/api/products');
+                const response = await fetch('https://diyamgaz.onrender.com/api/products');
                 const result = await response.json();
                 const foundProduct = result.data.find(p => p.id === parseInt(id));
                 setProduct(foundProduct);
 
                 // Incrémenter les vues silencieusement
                 if (foundProduct) {
-                    fetch(`http://localhost:5000/api/products/${id}/views`, { method: 'PUT' }).catch(() => { });
+                    fetch(`https://diyamgaz.onrender.com/api/products/${id}/views`, { method: 'PUT' }).catch(() => { });
                 }
             } catch (error) {
                 console.error('Error fetching product details:', error);
@@ -50,7 +50,7 @@ const ProductDetail = () => {
     let displayImage = '/images/Placeholder.png';
 
     if (product.photos && product.photos.length > 0) {
-        displayImage = `http://localhost:5000${product.photos[0]}`;
+        displayImage = `https://diyamgaz.onrender.com${product.photos[0]}`;
     } else if (product.category === 'GAZ') {
         displayImage = '/premium_gas_bottle_senegal_1772229211062.png';
     } else if (product.category === 'EAU') {
