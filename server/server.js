@@ -14,8 +14,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files for uploaded photos
+// Serve static files for uploaded photos and hardcoded product images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // API Routes
 app.use('/api/products', productsRouter);
