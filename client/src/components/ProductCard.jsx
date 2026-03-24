@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
 const ProductCard = ({ product }) => {
-    const { addToCart } = useCart();
+    const { addToCart, cartItems } = useCart();
     const { user } = useAuth();
     const [quantity, setQuantity] = useState(1);
     const [added, setAdded] = useState(false);
@@ -21,6 +21,9 @@ const ProductCard = ({ product }) => {
         setAdded(true);
         setTimeout(() => setAdded(false), 2000); // Reset after 2s for demo
     };
+
+    const itemInCart = cartItems ? cartItems.find(item => item.id === product.id) : null;
+    const quantityInCart = itemInCart ? itemInCart.quantity : 0;
 
     // Determine image from backend or default fallback
     let displayImage = '/images/Placeholder.png';
@@ -51,6 +54,11 @@ const ProductCard = ({ product }) => {
                     {isB2B && <span style={{ marginLeft: '10px', fontSize: '10px', background: 'var(--primary-color)', color: 'white', padding: '2px 6px', borderRadius: '4px' }}>Tarif B2B</span>}
                 </div>
                 <p className="product-desc">{product.description}</p>
+                {quantityInCart > 0 && (
+                    <div style={{ fontSize: '13px', color: '#10b981', fontWeight: 'bold', marginBottom: '12px' }}>
+                        🛒 {quantityInCart} dans le panier
+                    </div>
+                )}
 
                 <div className="action-row">
                     <div className="quantity-selector">

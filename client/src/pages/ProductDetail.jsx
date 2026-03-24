@@ -5,7 +5,7 @@ import { ShoppingCart } from 'lucide-react'; // icone ajoutée
 
 const ProductDetail = () => {
     const { id } = useParams();
-    const { addToCart } = useCart();
+    const { addToCart, cartItems } = useCart();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
@@ -45,6 +45,9 @@ const ProductDetail = () => {
         setAdded(true);
         setTimeout(() => setAdded(false), 2000);
     };
+
+    const itemInCart = cartItems && product ? cartItems.find(item => item.id === product.id) : null;
+    const quantityInCart = itemInCart ? itemInCart.quantity : 0;
 
     // Determine image from backend or fallback to category defaults
     let displayImage = '/images/Placeholder.png';
@@ -110,7 +113,13 @@ const ProductDetail = () => {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '12px' }}>
+                        {quantityInCart > 0 && (
+                            <div style={{ marginTop: '12px', padding: '12px', background: '#f8fafc', borderRadius: '12px', color: '#0f172a', fontWeight: 'bold', textAlign: 'center', border: '1px solid #e2e8f0' }}>
+                                🛒 Vous avez déjà {quantityInCart} article(s) de ce produit dans votre panier
+                            </div>
+                        )}
+
+                        <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
                             <button
                                 onClick={handleBuy}
                                 style={{
