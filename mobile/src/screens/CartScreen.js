@@ -33,11 +33,11 @@ export default function CartScreen({ navigation }) {
         const title = item.title || item.name;
         let displayImage = null;
         if (item.photos && item.photos.length > 0) {
-            displayImage = `http://192.168.1.116:5000${item.photos[0]}`;
+            displayImage = encodeURI(`https://diyamgaz.onrender.com${item.photos[0]}`);
         } else if (item.images && item.images.length > 0) {
-            displayImage = `http://192.168.1.116:5000${item.images[0]}`;
+            displayImage = encodeURI(`https://diyamgaz.onrender.com${item.images[0]}`);
         } else if (item.category === 'GAZ') {
-             displayImage = `http://192.168.1.116:5000/premium_gas_bottle_senegal_1772229211062.png`;
+             displayImage = encodeURI(`https://diyamgaz.onrender.com/images/premium_gas_bottle_senegal_1772229211062.png`);
         }
 
         const itemId = item._id || item.id || Math.random().toString();
@@ -164,6 +164,8 @@ export default function CartScreen({ navigation }) {
                         </View>
                     </View>
                 )}
+                
+                <Footer />
             </ScrollView>
         </SafeAreaView>
     );

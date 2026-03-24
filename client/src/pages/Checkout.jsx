@@ -104,7 +104,7 @@ const Checkout = () => {
                         </button>
 
                         <a
-                            href={`https://wa.me/221711425492?text=Bonjour,%20je%20souhaite%20finaliser%20ma%20commande.%0A%0A*Panier:*%0A${cartItems.map(item => `- ${item.quantity}x ${item.title}`).join('%0A')}%0A%0A*Zone de livraison:* ${ZONES.find(z => z.price === selectedZone)?.name || ''}%0A*Total:* ${total} FCFA`}
+                            href={`https://wa.me/221711425492?text=Bonjour,%20je%20souhaite%20finaliser%20ma%20commande.%0A%0A*Panier:*%0A${cartItems.map(item => `- ${item.quantity}x ${item.title}`).join('%0A')}%0A%0A*Zone de livraison:* ${ZONES.find(z => z.price === selectedZone)?.name || ''}%0A*Total:* ${total} FCFA%0A%0ACommande%20débutée%20sur%20:%20${encodeURIComponent(window.location.origin)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{

@@ -5,12 +5,15 @@ import { useCart } from '../context/CartContext';
 
 export default function ProductDetailScreen({ route, navigation }) {
     const { product } = route.params;
-    const { addToCart } = useCart();
+    const { addToCart, cartItems } = useCart();
     const [quantity, setQuantity] = useState(1);
     const [added, setAdded] = useState(false);
 
     const increment = () => setQuantity(prev => prev + 1);
     const decrement = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+
+    const itemInCart = cartItems ? cartItems.find(item => (item._id || item.id) === (product._id || product.id)) : null;
+    const quantityInCart = itemInCart ? itemInCart.quantity : 0;
 
     const handleBuy = () => {
         addToCart(product, quantity);
@@ -20,7 +23,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
     const handleWhatsApp = () => {
         const title = product.title || product.name;
-        const message = `Bonjour, je souhaite commander ${quantity} x ${title}`;
+        const message = `Bonjour, je souhaite commander ${quantity} x ${title}\n\nLien: https://diyamgaz-client.vercel.app/product/${product._id || product.id}`;
         const url = `whatsapp://send?phone=221711425492&text=${encodeURIComponent(message)}`;
         Linking.openURL(url).catch(() => {
             alert("Veuillez installer WhatsApp pour utiliser cette fonctionnalité.");
@@ -30,11 +33,11 @@ export default function ProductDetailScreen({ route, navigation }) {
     const title = product.title || product.name;
     let displayImage = null;
     if (product.photos && product.photos.length > 0) {
-        displayImage = `http://192.168.1.116:5000${product.photos[0]}`;
+        displayImage = encodeURI(`https://diyamgaz.onrender.com${product.photos[0]}`);
     } else if (product.images && product.images.length > 0) {
-        displayImage = `http://192.168.1.116:5000${product.images[0]}`;
+        displayImage = encodeURI(`https://diyamgaz.onrender.com${product.images[0]}`);
     } else if (product.category === 'GAZ') {
-         displayImage = `http://192.168.1.116:5000/premium_gas_bottle_senegal_1772229211062.png`;
+         displayImage = encodeURI(`https://diyamgaz.onrender.com/images/premium_gas_bottle_senegal_1772229211062.png`);
     }
 
     return (
@@ -124,8 +127,18 @@ export default function ProductDetailScreen({ route, navigation }) {
                             <View style={styles.dot} />
                             <Text style={styles.stockText}>En stock et prêt à être expédié</Text>
                         </View>
+
+                        {quantityInCart > 0 && (
+                            <View style={{ marginTop: 15, padding: 12, backgroundColor: '#f1f5f9', borderRadius: 8 }}>
+                                <Text style={{ color: '#0f172a', fontWeight: 'bold', textAlign: 'center' }}>
+                                    🛒 Déjà dans le panier : {quantityInCart}
+                                </Text>
+                            </View>
+                        )}
                     </View>
                 </View>
+
+                <Footer />
             </ScrollView>
         </SafeAreaView>
     );

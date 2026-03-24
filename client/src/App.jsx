@@ -96,7 +96,7 @@ function App() {
                   <h4 style={{ fontSize: '18px', fontWeight: '600' }}>Contact</h4>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '15px' }}>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--text-muted)' }}>
-                      <Phone size={18} color="var(--primary-color)" /> +221 77 123 45 67
+                      <Phone size={18} color="var(--primary-color)" /> +221 71 142 54 92
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--text-muted)' }}>
                       <Mail size={18} color="var(--primary-color)" /> contact@diyamgaz.sn

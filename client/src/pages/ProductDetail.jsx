@@ -127,7 +127,7 @@ const ProductDetail = () => {
                             </button>
 
                             <a
-                                href={`https://wa.me/221711425492?text=Bonjour,%20je%20souhaite%20commander%20${quantity}%20x%20${encodeURIComponent(product.title)}`}
+                                href={`https://wa.me/221711425492?text=Bonjour,%20je%20souhaite%20commander%20${quantity}%20x%20${encodeURIComponent(product.title)}%0A%0ALien:%20${encodeURIComponent(window.location.href)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{

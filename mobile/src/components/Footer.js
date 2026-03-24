@@ -28,7 +28,7 @@ const Footer = () => {
                 <Text style={styles.sectionTitle}>Contact</Text>
                 <View style={styles.contactItem}>
                     <Feather name="phone" size={16} color="#3b82f6" />
-                    <Text style={styles.contactText}>+221 77 123 45 67</Text>
+                    <Text style={styles.contactText}>+221 71 142 54 92</Text>
                 </View>
                 <View style={styles.contactItem}>
                     <Feather name="mail" size={16} color="#3b82f6" />
