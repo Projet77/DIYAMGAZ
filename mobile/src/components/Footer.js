@@ -32,7 +32,7 @@ const Footer = () => {
                 </View>
                 <View style={styles.contactItem}>
                     <Feather name="mail" size={16} color="#3b82f6" />
-                    <Text style={styles.contactText}>contact@diyamgaz.sn</Text>
+                    <Text style={styles.contactText}>info@diyamgaz.com</Text>
                 </View>
                 <View style={styles.contactItem}>
                     <Feather name="map-pin" size={16} color="#3b82f6" />

@@ -114,7 +114,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                                 onPress={handleBuy}
                             >
                                 <Text style={styles.addToCartText}>
-                                    {added ? '✓ Ajouté' : `Ajouter - ${(product.price * quantity)} FCFA`}
+                                    {added ? '✓ Ajouté' : `Commander - ${(product.price * quantity)} FCFA`}
                                 </Text>
                             </TouchableOpacity>
 

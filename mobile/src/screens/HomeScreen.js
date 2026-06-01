@@ -14,6 +14,7 @@ export default function HomeScreen({ navigation }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [toastVisible, setToastVisible] = useState(false);
     
     const { addToCart, getCartCount } = useCart();
     const cartCount = getCartCount();
@@ -31,6 +32,12 @@ export default function HomeScreen({ navigation }) {
             console.error("Erreur de récupération des produits :", error);
             setLoading(false);
         }
+    };
+
+    const handleAddToCart = (item) => {
+        addToCart(item, 1);
+        setToastVisible(true);
+        setTimeout(() => setToastVisible(false), 2000);
     };
 
     const filteredProducts = products.filter(p => {
@@ -79,8 +86,8 @@ export default function HomeScreen({ navigation }) {
                         {item.oldPrice && <Text style={styles.oldPrice}>{item.oldPrice}</Text>}
                     </View>
 
-                    <TouchableOpacity style={styles.buyBtn} onPress={() => addToCart(item, 1)}>
-                        <Text style={styles.buyText}>+ Ajouter</Text>
+                    <TouchableOpacity style={styles.buyBtn} onPress={() => handleAddToCart(item)}>
+                        <Text style={styles.buyText}>Commander</Text>
                     </TouchableOpacity>
                 </View>
             </TouchableOpacity>
@@ -184,6 +191,12 @@ export default function HomeScreen({ navigation }) {
 
                 <Footer />
             </ScrollView>
+
+            {toastVisible && (
+                <View style={{ position: 'absolute', bottom: 30, left: 20, right: 20, backgroundColor: '#10b981', padding: 15, borderRadius: 12, alignItems: 'center', elevation: 5, shadowColor: '#000', shadowOpacity: 0.2, shadowOffset: {height: 2, width: 0}, zIndex: 1000 }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>🛒 Produit ajouté au panier !</Text>
+                </View>
+            )}
         </SafeAreaView>
     );
 }

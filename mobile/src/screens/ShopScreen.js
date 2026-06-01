@@ -9,6 +9,7 @@ export default function ShopScreen({ route, navigation }) {
     const { addToCart } = useCart();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [toastVisible, setToastVisible] = useState(false);
     
     // Récupérer la catégorie passée en paramètre (depuis Home), "TOUS" par défaut
     const categoryFilter = route?.params?.category || 'TOUS';
@@ -26,6 +27,12 @@ export default function ShopScreen({ route, navigation }) {
             console.error("Erreur de récupération des produits :", error);
             setLoading(false);
         }
+    };
+
+    const handleAddToCart = (item) => {
+        addToCart(item, 1);
+        setToastVisible(true);
+        setTimeout(() => setToastVisible(false), 2000);
     };
 
     const filteredProducts = categoryFilter === 'TOUS'
@@ -71,8 +78,8 @@ export default function ShopScreen({ route, navigation }) {
                     </View>
 
                     {/* Bouton Acheter qui mime le web (.buy-btn) */}
-                    <TouchableOpacity style={styles.buyBtn} onPress={() => addToCart(item, 1)}>
-                        <Text style={styles.buyText}>+ Ajouter</Text>
+                    <TouchableOpacity style={styles.buyBtn} onPress={() => handleAddToCart(item)}>
+                        <Text style={styles.buyText}>Commander</Text>
                     </TouchableOpacity>
                 </View>
             </TouchableOpacity>
@@ -99,6 +106,12 @@ export default function ShopScreen({ route, navigation }) {
                 numColumns={2}
                 contentContainerStyle={styles.list}
             />
+            
+            {toastVisible && (
+                <View style={{ position: 'absolute', bottom: 30, left: 20, right: 20, backgroundColor: '#10b981', padding: 15, borderRadius: 12, alignItems: 'center', elevation: 5, shadowColor: '#000', shadowOpacity: 0.2, shadowOffset: {height: 2, width: 0}, zIndex: 1000 }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>🛒 Produit ajouté au panier !</Text>
+                </View>
+            )}
         </View>
     );
 }

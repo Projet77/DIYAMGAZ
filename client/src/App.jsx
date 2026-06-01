@@ -99,7 +99,7 @@ function App() {
                       <Phone size={18} color="var(--primary-color)" /> +221 71 142 54 92
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--text-muted)' }}>
-                      <Mail size={18} color="var(--primary-color)" /> contact@diyamgaz.sn
+                      <Mail size={18} color="var(--primary-color)" /> info@diyamgaz.com
                     </li>
                     <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--text-muted)' }}>
                       <MapPin size={18} color="var(--primary-color)" /> Dakar, Sénégal
