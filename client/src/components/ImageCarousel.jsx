@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const ImageCarousel = ({ images, interval = 5000 }) => {
+const ImageCarousel = ({ images, interval = 5000, objectFit = 'contain' }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
@@ -48,7 +48,7 @@ const ImageCarousel = ({ images, interval = 5000 }) => {
                         style={{
                             width: '100%',
                             height: '100%',
-                            objectFit: 'cover'
+                            objectFit: objectFit
                         }}
                     />
                     {img.caption && (
