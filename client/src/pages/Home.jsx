@@ -28,17 +28,8 @@ const Home = () => {
 
     return (
         <div className="home-page fade-in">
-            <section className="hero">
-                <div className="hero-main fade-up">
-                    <div className="hero-content">
-                        <h2>Le gaz, l'eau et le charbon,<br />livrés avec élégance.</h2>
-                        <p className="hook">Une expérience premium, directement chez vous.</p>
-                        <p className="description">
-                            Fini les tracas des bouteilles vides. DIYAMGAZ redéfinit la livraison à domicile avec un service rapide, fiable et moderne. Quelques clics suffisent.
-                        </p>
-                    </div>
-                </div>
-                <div className="hero-visual fade-up delay-1" style={{ position: 'relative', width: '100%', height: '600px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.1)' }}>
+            <section className="hero" style={{ gridTemplateColumns: '1fr' }}>
+                <div className="hero-visual fade-up" style={{ position: 'relative', width: '100%', height: '500px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.1)' }}>
                     <ImageCarousel images={heroImages} interval={4000} />
                 </div>
             </section>
