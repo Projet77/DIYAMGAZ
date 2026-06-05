@@ -63,18 +63,18 @@ const ProductDetail = () => {
     }
 
     return (
-        <div className="fade-in" style={{ padding: '40px 20px 80px', maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="fade-in" style={{ padding: '40px 20px 80px', maxWidth: '1400px', margin: '0 auto' }}>
             <div style={{ marginBottom: '30px' }}>
                 <Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: '500', transition: 'var(--transition-fast)' }} onMouseEnter={(e) => e.target.style.color = 'var(--text-main)'} onMouseLeave={(e) => e.target.style.color = 'var(--text-muted)'}>
                     <span style={{ fontSize: '18px' }}>←</span> Retour à la boutique
                 </Link>
             </div>
 
-            <div className="bento-card fade-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '0', overflow: 'hidden', padding: 0 }}>
+            <div className="bento-card fade-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '0', overflow: 'hidden', padding: 0 }}>
                 {/* Visual Section */}
-                <div style={{ background: 'var(--bg-tertiary)', padding: '60px 40px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '500px' }}>
+                <div style={{ background: 'var(--bg-tertiary)', padding: '60px 40px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '600px' }}>
                     <img
-                        style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))', mixBlendMode: 'multiply', maxWidth: '100%', maxHeight: '450px', objectFit: 'contain' }}
+                        style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))', mixBlendMode: 'multiply', maxWidth: '100%', maxHeight: '520px', objectFit: 'contain' }}
                         src={displayImage}
                         alt={product.title}
                         className="floating"
@@ -82,7 +82,7 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Content Section */}
-                <div style={{ padding: '60px 40px', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)' }}>
+                <div style={{ padding: '80px 60px', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)', justifyContent: 'center' }}>
                     <div style={{ marginBottom: 'auto' }}>
                         <span style={{ display: 'inline-block', background: 'var(--primary-gradient)', color: 'white', fontWeight: '600', letterSpacing: '1px', fontSize: '12px', textTransform: 'uppercase', padding: '6px 12px', borderRadius: '100px', marginBottom: '24px' }}>
                             {product.category}

@@ -288,7 +288,7 @@ const AdminDashboard = () => {
 
                 {/* Dashboard Scrollable Content */}
                 <div style={{ padding: '40px', overflowY: 'auto', flex: 1 }}>
-                    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                    <div style={{ maxWidth: '1450px', margin: '0 auto' }}>
 
                         {/* ================= TAB: DASHBOARD ================= */}
                         {activeTab === 'dashboard' && stats && (
