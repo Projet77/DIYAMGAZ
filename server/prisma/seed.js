@@ -85,21 +85,21 @@ const PRODUCTS = [
 
     // CHARBON
     {
-        title: 'Charbon de bois 2.5kg (Choix 1)',
+        title: 'Charbon de bois 2.5kg',
         description: 'Charbon de qualité prémium pour la cuisson rapide.',
         price: 1500,
         category: 'CHARBON',
         photos: '["/images/products/charbon/1.png"]'
     },
     {
-        title: 'Charbon écologique (Choix 2)',
+        title: 'Charbon écologique',
         description: 'Brûle plus longtemps, sans fumée nocive.',
         price: 2000,
         category: 'CHARBON',
         photos: '["/images/products/charbon/2.png"]'
     },
     {
-        title: 'Sac de Charbon Traditionnel (Choix 3)',
+        title: 'Sac de Charbon Traditionnel',
         description: 'L\'essentiel pour vos grillades.',
         price: 2500,
         category: 'CHARBON',
