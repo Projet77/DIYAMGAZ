@@ -847,3 +847,118 @@ footer {
     gap: 0;
   }
 }
+
+/* =========================================================================
+   PRODUCT DETAIL PAGE (RESPONSIVE)
+   ========================================================================= */
+
+.product-detail-container {
+  padding: 40px 20px 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.product-detail-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.product-detail-visual {
+  background: var(--bg-tertiary);
+  padding: 60px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px;
+}
+
+.product-detail-visual img {
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+  mix-blend-mode: multiply;
+  max-width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+}
+
+.product-detail-content {
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  justify-content: center;
+}
+
+.product-detail-title {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0 0 16px 0;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.product-detail-price {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.product-detail-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+@media (max-width: 1024px) {
+  .product-detail-card {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-detail-visual {
+    min-height: 450px;
+  }
+  
+  .product-detail-content {
+    padding: 50px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-detail-container {
+    padding: 20px 10px 40px;
+  }
+  
+  .product-detail-visual {
+    padding: 40px 20px;
+    min-height: 350px;
+  }
+  
+  .product-detail-visual img {
+    max-height: 300px;
+  }
+  
+  .product-detail-content {
+    padding: 30px 20px;
+  }
+  
+  .product-detail-title {
+    font-size: 28px;
+  }
+  
+  .product-detail-price {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  .product-detail-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

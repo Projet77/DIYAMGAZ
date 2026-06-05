@@ -61,20 +61,18 @@ const ProductDetail = () => {
     } else if (product.category === 'CHARBON') {
         displayImage = '/premium_charcoal_1772227593891.png';
     }
-
     return (
-        <div className="fade-in" style={{ padding: '40px 20px 80px', maxWidth: '1400px', margin: '0 auto' }}>
+        <div className="product-detail-container fade-in">
             <div style={{ marginBottom: '30px' }}>
                 <Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: '500', transition: 'var(--transition-fast)' }} onMouseEnter={(e) => e.target.style.color = 'var(--text-main)'} onMouseLeave={(e) => e.target.style.color = 'var(--text-muted)'}>
                     <span style={{ fontSize: '18px' }}>←</span> Retour à la boutique
                 </Link>
             </div>
 
-            <div className="bento-card fade-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '0', overflow: 'hidden', padding: 0 }}>
+            <div className="bento-card product-detail-card fade-up">
                 {/* Visual Section */}
-                <div style={{ background: 'var(--bg-tertiary)', padding: '60px 40px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '600px' }}>
+                <div className="product-detail-visual">
                     <img
-                        style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))', mixBlendMode: 'multiply', maxWidth: '100%', maxHeight: '520px', objectFit: 'contain' }}
                         src={displayImage}
                         alt={product.title}
                         className="floating"
@@ -82,17 +80,17 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Content Section */}
-                <div style={{ padding: '80px 60px', display: 'flex', flexDirection: 'column', background: 'var(--bg-secondary)', justifyContent: 'center' }}>
+                <div className="product-detail-content">
                     <div style={{ marginBottom: 'auto' }}>
                         <span style={{ display: 'inline-block', background: 'var(--primary-gradient)', color: 'white', fontWeight: '600', letterSpacing: '1px', fontSize: '12px', textTransform: 'uppercase', padding: '6px 12px', borderRadius: '100px', marginBottom: '24px' }}>
                             {product.category}
                         </span>
 
-                        <h1 style={{ fontSize: '42px', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 16px 0', lineHeight: '1.1', letterSpacing: '-1px' }}>
+                        <h1 className="product-detail-title">
                             {product.title}
                         </h1>
 
-                        <div style={{ fontSize: '36px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '32px', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                        <div className="product-detail-price">
                             {product.price} <span style={{ fontSize: '18px', color: 'var(--text-muted)', fontWeight: '600' }}>FCFA</span>
                         </div>
 
@@ -119,7 +117,7 @@ const ProductDetail = () => {
                             </div>
                         )}
 
-                        <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+                        <div className="product-detail-actions">
                             <button
                                 onClick={handleBuy}
                                 style={{
@@ -146,7 +144,7 @@ const ProductDetail = () => {
                                     boxShadow: '0 10px 25px rgba(37, 211, 102, 0.3)'
                                 }}
                                 onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                                onMouseLeave={(e) => e.currentTarget.style.transform = 'transparent'}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                                 WhatsApp
