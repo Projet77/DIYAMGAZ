@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { LayoutDashboard, Package, Users, Handshake, TrendingUp, Eye, DollarSign, Download, Edit2, Trash2 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -19,10 +19,15 @@ const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
     const [usersList, setUsersList] = useState([]);
     const [editingProductId, setEditingProductId] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [photos, setPhotos] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState('dashboard');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const activeTab = searchParams.get('tab') || 'dashboard';
+    const setActiveTab = (tab) => {
+        setSearchParams({ tab });
+    };
     const [statsPeriod, setStatsPeriod] = useState('month'); // 'week', 'month', 'year'
 
     useEffect(() => {
@@ -107,6 +112,13 @@ const AdminDashboard = () => {
         document.body.removeChild(link);
     };
 
+    const handleAddClick = () => {
+        setEditingProductId(null);
+        setFormData({ title: '', description: '', price: '', quantity: 1, category: 'GAZ' });
+        setPhotos([]);
+        setIsModalOpen(true);
+    };
+
     const handleEditClick = (product) => {
         setEditingProductId(product.id);
         setFormData({
@@ -117,13 +129,14 @@ const AdminDashboard = () => {
             category: product.category
         });
         setPhotos([]);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setIsModalOpen(true);
     };
 
     const handleCancelEdit = () => {
         setEditingProductId(null);
         setFormData({ title: '', description: '', price: '', quantity: 1, category: 'GAZ' });
         setPhotos([]);
+        setIsModalOpen(false);
     };
 
     const handleSubmit = async (e) => {
@@ -465,146 +478,184 @@ const AdminDashboard = () => {
                         {/* ================= TAB: PRODUCTS ================= */}
                         {activeTab === 'products' && (
                             <div className="fade-in">
-                                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 2fr)', gap: '32px' }}>
+                                {/* Barre d'action supérieure */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                                    <div>
+                                        <h3 style={{ fontSize: '24px', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Gestion du Catalogue</h3>
+                                        <p style={{ margin: '4px 0 0 0', color: 'var(--text-muted)', fontSize: '14px' }}>Ajoutez, modifiez ou supprimez les articles de la boutique en ligne</p>
+                                    </div>
+                                    <button
+                                        onClick={handleAddClick}
+                                        style={{
+                                            display: 'flex', alignItems: 'center', gap: '8px',
+                                            background: 'var(--primary-gradient)', color: 'white',
+                                            padding: '12px 24px', borderRadius: '12px', fontSize: '15px',
+                                            fontWeight: '600', border: 'none', cursor: 'pointer',
+                                            transition: 'all 0.2s', boxShadow: '0 4px 15px rgba(247, 147, 30, 0.3)'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                                    >
+                                        + Ajouter un produit
+                                    </button>
+                                </div>
 
-                                    {/* Formulaire Produit */}
-                                    <div className="bento-card" style={{ alignSelf: 'start', padding: '32px' }}>
-                                        <h3 style={{ fontSize: '18px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #e2e8f0' }}>
-                                            {editingProductId ? 'Éditer le produit' : 'Nouveau Produit'}
-                                        </h3>
-                                        <form onSubmit={handleSubmit} className="admin-form">
-                                            <div className="form-group">
-                                                <label>Titre du produit</label>
-                                                <input type="text" name="title" value={formData.title} onChange={handleInputChange} required />
+                                {/* Table des produits en pleine largeur */}
+                                <div className="bento-card" style={{ padding: 0, overflow: 'hidden' }}>
+                                    <div style={{ padding: '24px 32px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white' }}>
+                                        <div>
+                                            <h3 style={{ margin: 0, fontSize: '18px' }}>Catalogue Actif</h3>
+                                            <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{products.length} articles en ligne</span>
+                                        </div>
+                                        <button
+                                            onClick={handleExportCSV}
+                                            style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', border: '1px solid #cbd5e1', padding: '8px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '600', color: 'var(--text-main)', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
+                                        >
+                                            <Download size={16} /> Exporter CSV
+                                        </button>
+                                    </div>
+                                    <div style={{ overflowX: 'auto' }}>
+                                        <table className="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Produit</th>
+                                                    <th>Prix</th>
+                                                    <th>Stock</th>
+                                                    <th style={{ textAlign: 'right' }}>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {products.map(product => (
+                                                    <tr key={product.id}>
+                                                        <td>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                                                <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: '#f8fafc', padding: '4px', border: '1px solid #e2e8f0' }}>
+                                                                    <img src={product.photos && product.photos.length > 0 ? `https://diyamgaz.onrender.com${product.photos[0]}` : '/images/Placeholder.png'} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }} />
+                                                                </div>
+                                                                <div>
+                                                                    <div style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '14px' }}>{product.title}</div>
+                                                                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>{product.category}</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td style={{ fontWeight: '500' }}>{product.price} <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>FCFA</span></td>
+                                                        <td>
+                                                            <span style={{ display: 'inline-block', padding: '4px 8px', borderRadius: '6px', background: product.quantity > 5 ? '#ecfdf5' : '#fef2f2', color: product.quantity > 5 ? '#10b981' : '#ef4444', fontSize: '13px', fontWeight: '600' }}>
+                                                                {product.quantity} u.
+                                                            </span>
+                                                        </td>
+                                                        <td style={{ textAlign: 'right' }}>
+                                                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                                                                <button
+                                                                    onClick={() => handleEditClick(product)}
+                                                                    style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#eff6ff', color: '#3b82f6', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s' }}
+                                                                    onMouseEnter={(e) => e.currentTarget.style.background = '#dbeafe'}
+                                                                    onMouseLeave={(e) => e.currentTarget.style.background = '#eff6ff'}
+                                                                >
+                                                                    <Edit2 size={14} /> Éditer
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleDelete(product.id)}
+                                                                    style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#fef2f2', color: '#ef4444', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s' }}
+                                                                    onMouseEnter={(e) => e.currentTarget.style.background = '#fee2e2'}
+                                                                    onMouseLeave={(e) => e.currentTarget.style.background = '#fef2f2'}
+                                                                >
+                                                                    <Trash2 size={14} /> Supprimer
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                                {products.length === 0 && (
+                                                    <tr><td colSpan="4" style={{ textAlign: 'center', padding: '40px' }}>Catalogue vide</td></tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                {/* Modal moderne de création / modification */}
+                                {isModalOpen && (
+                                    <div style={{
+                                        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                                        background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(8px)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        zIndex: 100, animation: 'fadeIn 0.3s ease-out'
+                                    }}>
+                                        <div className="bento-card fade-up" style={{
+                                            width: '90%', maxWidth: '600px', padding: '32px',
+                                            maxHeight: '90vh', overflowY: 'auto',
+                                            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                                            border: '1px solid rgba(255, 255, 255, 0.2)'
+                                        }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid #e2e8f0' }}>
+                                                <h3 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+                                                    {editingProductId ? 'Éditer le produit' : 'Nouveau Produit'}
+                                                </h3>
+                                                <button
+                                                    onClick={handleCancelEdit}
+                                                    style={{ background: 'none', border: 'none', fontSize: '28px', cursor: 'pointer', color: 'var(--text-muted)', padding: '0 8px', lineHeight: 1 }}
+                                                >
+                                                    &times;
+                                                </button>
                                             </div>
-
-                                            <div className="form-row">
+                                            <form onSubmit={handleSubmit} className="admin-form">
                                                 <div className="form-group">
-                                                    <label>Catégorie</label>
-                                                    <select name="category" value={formData.category} onChange={handleInputChange}>
-                                                        <option value="GAZ">GAZ</option>
-                                                        <option value="EAU">EAU</option>
-                                                        <option value="CHARBON">CHARBON</option>
-                                                        <option value="ACCESSOIRES">ACCESSOIRES</option>
-                                                    </select>
+                                                    <label>Titre du produit</label>
+                                                    <input type="text" name="title" value={formData.title} onChange={handleInputChange} required />
                                                 </div>
-                                                <div className="form-group">
-                                                    <label>Prix (FCFA)</label>
-                                                    <input type="number" name="price" value={formData.price} onChange={handleInputChange} required />
-                                                </div>
-                                            </div>
 
-                                            <div className="form-group">
-                                                <label>Stock / Quantité Initiale</label>
-                                                <input type="number" name="quantity" value={formData.quantity} onChange={handleInputChange} min="1" required />
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label>Description courte</label>
-                                                <textarea name="description" value={formData.description} onChange={handleInputChange} rows="3" required></textarea>
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label>Téleverser des Photos (Max 4)</label>
-                                                <div className="file-upload-wrapper" style={{ padding: '20px', borderRadius: '12px', border: '2px dashed #cbd5e1', background: '#f8fafc', position: 'relative' }}>
-                                                    <input type="file" multiple accept="image/*" onChange={handlePhotoUpload} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />
-                                                    <div style={{ textAlign: 'center', pointerEvents: 'none' }}>
-                                                        <span style={{ fontSize: '14px', color: '#64748b', fontWeight: '500' }}>{photos.length > 0 ? `${photos.length} fichiers ajoutés` : 'Glissez vos fichiers ou cliquez'}</span>
+                                                <div className="form-row">
+                                                    <div className="form-group">
+                                                        <label>Catégorie</label>
+                                                        <select name="category" value={formData.category} onChange={handleInputChange}>
+                                                            <option value="GAZ">GAZ</option>
+                                                            <option value="EAU">EAU</option>
+                                                            <option value="CHARBON">CHARBON</option>
+                                                            <option value="ACCESSOIRES">ACCESSOIRES</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label>Prix (FCFA)</label>
+                                                        <input type="number" name="price" value={formData.price} onChange={handleInputChange} required />
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div style={{ display: 'flex', gap: '12px', marginTop: '32px' }}>
-                                                <button type="submit" disabled={loading} style={{ flex: 1, padding: '14px', borderRadius: '12px', background: editingProductId ? 'var(--secondary-color)' : 'var(--text-main)', color: 'white', fontWeight: '600', border: 'none', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-                                                    {loading ? 'Traitement...' : editingProductId ? 'Mettre à jour' : 'Publier'}
-                                                </button>
+                                                <div className="form-group">
+                                                    <label>Stock / Quantité Initiale</label>
+                                                    <input type="number" name="quantity" value={formData.quantity} onChange={handleInputChange} min="1" required />
+                                                </div>
 
-                                                {editingProductId && (
+                                                <div className="form-group">
+                                                    <label>Description courte</label>
+                                                    <textarea name="description" value={formData.description} onChange={handleInputChange} rows="3" required></textarea>
+                                                </div>
+
+                                                <div className="form-group">
+                                                    <label>Téléverser des Photos (Max 4)</label>
+                                                    <div className="file-upload-wrapper" style={{ padding: '20px', borderRadius: '12px', border: '2px dashed #cbd5e1', background: '#f8fafc', position: 'relative' }}>
+                                                        <input type="file" multiple accept="image/*" onChange={handlePhotoUpload} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />
+                                                        <div style={{ textAlign: 'center', pointerEvents: 'none' }}>
+                                                            <span style={{ fontSize: '14px', color: '#64748b', fontWeight: '500' }}>{photos.length > 0 ? `${photos.length} fichiers ajoutés` : 'Glissez vos fichiers ou cliquez'}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div style={{ display: 'flex', gap: '12px', marginTop: '32px' }}>
+                                                    <button type="submit" disabled={loading} style={{ flex: 1, padding: '14px', borderRadius: '12px', background: editingProductId ? 'var(--secondary-color)' : 'var(--text-main)', color: 'white', fontWeight: '600', border: 'none', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                                                        {loading ? 'Traitement...' : editingProductId ? 'Mettre à jour' : 'Publier'}
+                                                    </button>
+
                                                     <button type="button" onClick={handleCancelEdit} style={{ padding: '14px 20px', borderRadius: '12px', border: '1px solid #e2e8f0', background: 'white', color: 'var(--text-main)', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}>
                                                         Annuler
                                                     </button>
-                                                )}
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    {/* Data Table : Catalogue */}
-                                    <div className="bento-card" style={{ padding: 0, alignSelf: 'start', overflow: 'hidden' }}>
-                                        <div style={{ padding: '24px 32px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white' }}>
-                                            <div>
-                                                <h3 style={{ margin: 0, fontSize: '18px' }}>Catalogue Actif</h3>
-                                                <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{products.length} articles en ligne</span>
-                                            </div>
-                                            <button
-                                                onClick={handleExportCSV}
-                                                style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', border: '1px solid #cbd5e1', padding: '8px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '600', color: 'var(--text-main)', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}
-                                                onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
-                                                onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
-                                            >
-                                                <Download size={16} /> Exporter CSV
-                                            </button>
-                                        </div>
-                                        <div style={{ overflowX: 'auto' }}>
-                                            <table className="data-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Produit</th>
-                                                        <th>Prix</th>
-                                                        <th>Stock</th>
-                                                        <th style={{ textAlign: 'right' }}>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {products.map(product => (
-                                                        <tr key={product.id}>
-                                                            <td>
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                                                                    <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: '#f8fafc', padding: '4px', border: '1px solid #e2e8f0' }}>
-                                                                        <img src={product.photos && product.photos.length > 0 ? `https://diyamgaz.onrender.com${product.photos[0]}` : '/images/Placeholder.png'} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }} />
-                                                                    </div>
-                                                                    <div>
-                                                                        <div style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '14px' }}>{product.title}</div>
-                                                                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>{product.category}</div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td style={{ fontWeight: '500' }}>{product.price} <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>FCFA</span></td>
-                                                            <td>
-                                                                <span style={{ display: 'inline-block', padding: '4px 8px', borderRadius: '6px', background: product.quantity > 5 ? '#ecfdf5' : '#fef2f2', color: product.quantity > 5 ? '#10b981' : '#ef4444', fontSize: '13px', fontWeight: '600' }}>
-                                                                    {product.quantity} u.
-                                                                </span>
-                                                            </td>
-                                                            <td style={{ textAlign: 'right' }}>
-                                                                <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                                                                    <button
-                                                                        onClick={() => handleEditClick(product)}
-                                                                        style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#eff6ff', color: '#3b82f6', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s' }}
-                                                                        onMouseEnter={(e) => e.currentTarget.style.background = '#dbeafe'}
-                                                                        onMouseLeave={(e) => e.currentTarget.style.background = '#eff6ff'}
-                                                                    >
-                                                                        <Edit2 size={14} /> Éditer
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => handleDelete(product.id)}
-                                                                        style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#fef2f2', color: '#ef4444', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s' }}
-                                                                        onMouseEnter={(e) => e.currentTarget.style.background = '#fee2e2'}
-                                                                        onMouseLeave={(e) => e.currentTarget.style.background = '#fef2f2'}
-                                                                    >
-                                                                        <Trash2 size={14} /> Supprimer
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                    {products.length === 0 && (
-                                                        <tr><td colSpan="4" style={{ textAlign: 'center', padding: '40px' }}>Catalogue vide</td></tr>
-                                                    )}
-                                                </tbody>
-                                            </table>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
-
-                                </div>
+                                )}
                             </div>
                         )}
 
