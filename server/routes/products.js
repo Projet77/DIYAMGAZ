@@ -40,7 +40,7 @@ const { authMiddleware, adminMiddleware } = require('../middleware/authMiddlewar
 
 // POST new product (Admin)
 router.post('/', authMiddleware, adminMiddleware, upload.array('photos', 4), async (req, res) => {
-    const { title, description, price, quantity, category } = req.body;
+    const { title, description, price, quantity, category, isActive } = req.body;
     const photos = req.files ? req.files.map(f => `/uploads/${f.filename}`) : [];
 
     try {
@@ -51,7 +51,8 @@ router.post('/', authMiddleware, adminMiddleware, upload.array('photos', 4), asy
                 price: parseFloat(price) || 0,
                 quantity: parseInt(quantity) || 0,
                 category,
-                photos: JSON.stringify(photos)
+                photos: JSON.stringify(photos),
+                isActive: isActive === undefined ? true : (isActive === 'true' || isActive === true)
             }
         });
 
@@ -75,10 +76,20 @@ router.post('/', authMiddleware, adminMiddleware, upload.array('photos', 4), asy
 router.put('/:id', authMiddleware, adminMiddleware, upload.array('photos', 4), async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, price, quantity, category } = req.body;
+        const { title, description, price, quantity, category, isActive } = req.body;
         const parsedQuantity = parseInt(quantity);
 
-        const updateData = { title, description, price: parseFloat(price), quantity: parsedQuantity, category };
+        const updateData = { 
+            title, 
+            description, 
+            price: parseFloat(price), 
+            quantity: parsedQuantity, 
+            category 
+        };
+
+        if (isActive !== undefined) {
+            updateData.isActive = isActive === 'true' || isActive === true;
+        }
 
         // Si de nouvelles photos sont envoyées, on les met à jour
         if (req.files && req.files.length > 0) {

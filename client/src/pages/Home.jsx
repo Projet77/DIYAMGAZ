@@ -11,7 +11,7 @@ const Home = () => {
     useEffect(() => {
         fetch('https://diyamgaz.onrender.com/api/products')
             .then(res => res.json())
-            .then(data => setProducts(data.data || []))
+            .then(data => setProducts((data.data || []).filter(p => p.isActive !== false)))
             .catch(err => console.error('Erreur de chargement', err));
     }, []);
 

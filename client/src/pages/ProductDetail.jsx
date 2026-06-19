@@ -41,6 +41,7 @@ const ProductDetail = () => {
     const decrement = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
     const handleBuy = () => {
+        if (product.isActive === false) return;
         addToCart(product, quantity);
         setAdded(true);
         setTimeout(() => setAdded(false), 2000);
@@ -120,31 +121,34 @@ const ProductDetail = () => {
                         <div className="product-detail-actions">
                             <button
                                 onClick={handleBuy}
+                                disabled={product.isActive === false}
                                 style={{
                                     flex: 2, padding: '16px', borderRadius: '12px', border: 'none',
-                                    background: added ? '#10b981' : 'var(--text-main)', color: 'white',
-                                    fontSize: '16px', fontWeight: '600', cursor: 'pointer',
+                                    background: product.isActive === false ? '#94a3b8' : (added ? '#10b981' : 'var(--text-main)'), color: 'white',
+                                    fontSize: '16px', fontWeight: '600', cursor: product.isActive === false ? 'not-allowed' : 'pointer',
                                     transition: 'var(--transition-fast)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                                    boxShadow: added ? '0 10px 25px rgba(16, 185, 129, 0.4)' : '0 10px 25px rgba(0, 0, 0, 0.2)'
+                                    boxShadow: product.isActive === false ? 'none' : (added ? '0 10px 25px rgba(16, 185, 129, 0.4)' : '0 10px 25px rgba(0, 0, 0, 0.2)')
                                 }}
-                                onMouseEnter={(e) => { if (!added) e.currentTarget.style.transform = 'translateY(-2px)' }}
-                                onMouseLeave={(e) => { if (!added) e.currentTarget.style.transform = 'translateY(0)' }}
+                                onMouseEnter={(e) => { if (!added && product.isActive !== false) e.currentTarget.style.transform = 'translateY(-2px)' }}
+                                onMouseLeave={(e) => { if (!added && product.isActive !== false) e.currentTarget.style.transform = 'translateY(0)' }}
                             >
-                                {added ? '✓ Ajouté au panier' : <><ShoppingCart size={20} /> Ajouter {quantity} au panier - {(product.price * quantity).toLocaleString()} FCFA</>}
+                                {product.isActive === false ? 'En rupture de stock (épuisé)' : (added ? '✓ Ajouté au panier' : <><ShoppingCart size={20} /> Ajouter {quantity} au panier - {(product.price * quantity).toLocaleString()} FCFA</>)}
                             </button>
 
                             <a
-                                href={`https://wa.me/221711425492?text=Bonjour,%20je%20souhaite%20commander%20${quantity}%20x%20${encodeURIComponent(product.title)}%0A%0ALien:%20${encodeURIComponent(window.location.href)}`}
-                                target="_blank"
+                                href={product.isActive === false ? '#' : `https://wa.me/221711425492?text=Bonjour,%20je%20souhaite%20commander%20${quantity}%20x%20${encodeURIComponent(product.title)}%0A%0ALien:%20${encodeURIComponent(window.location.href)}`}
+                                target={product.isActive === false ? '_self' : '_blank'}
                                 rel="noopener noreferrer"
+                                onClick={(e) => { if (product.isActive === false) e.preventDefault(); }}
                                 style={{
-                                    flex: 1, padding: '16px', borderRadius: '12px', background: '#25D366', color: 'white',
+                                    flex: 1, padding: '16px', borderRadius: '12px', background: product.isActive === false ? '#cbd5e1' : '#25D366', color: 'white',
                                     textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                                     fontSize: '15px', fontWeight: '600', transition: 'var(--transition-fast)',
-                                    boxShadow: '0 10px 25px rgba(37, 211, 102, 0.3)'
+                                    boxShadow: product.isActive === false ? 'none' : '0 10px 25px rgba(37, 211, 102, 0.3)',
+                                    cursor: product.isActive === false ? 'not-allowed' : 'pointer'
                                 }}
-                                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                                onMouseLeave={(e) => e.currentTarget.style.transform = 'transparent'}
+                                onMouseEnter={(e) => { if (product.isActive !== false) e.currentTarget.style.transform = 'translateY(-2px)' }}
+                                onMouseLeave={(e) => { if (product.isActive !== false) e.currentTarget.style.transform = 'transparent' }}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                                 WhatsApp
@@ -152,8 +156,8 @@ const ProductDetail = () => {
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
-                            En stock et prêt à être expédié
+                            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: product.isActive !== false ? '#10b981' : '#ef4444' }}></span>
+                            {product.isActive !== false ? 'En stock et prêt à être expédié' : 'Temporairement en rupture / indisponible'}
                         </div>
                     </div>
                 </div>

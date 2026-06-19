@@ -21,7 +21,7 @@ export default function ShopScreen({ route, navigation }) {
     const fetchProducts = async () => {
         try {
             const response = await api.get('/products');
-            setProducts(response.data.data || []);
+            setProducts((response.data.data || []).filter(p => p.isActive !== false));
             setLoading(false);
         } catch (error) {
             console.error("Erreur de récupération des produits :", error);

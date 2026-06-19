@@ -3,9 +3,9 @@ import { useCart } from '../context/CartContext';
 import { useNavigate, Link } from 'react-router-dom';
 
 const ZONES = [
-    { id: 'zone1', name: 'Zone 1 (Rufisque, Kounoune...)', price: 500 },
-    { id: 'zone2', name: 'Zone 2 (Zac Mbao, Diakhaye...)', price: 1000 },
-    { id: 'zone3', name: 'Zone 3 (Keur Ndiaye lo, Bambilor...)', price: 1500 }
+    { id: 'zone1', name: 'Zone 1 (Almadies 2, Kounoune)', price: 500 },
+    { id: 'zone2', name: 'Zone 2 (Diakhaye, Keur Massar)', price: 1000 },
+    { id: 'zone3', name: 'Zone 3 (Zack Mbao, Rufisque)', price: 1500 }
 ];
 
 const Checkout = () => {

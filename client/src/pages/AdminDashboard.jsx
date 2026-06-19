@@ -14,7 +14,8 @@ const AdminDashboard = () => {
         description: '',
         price: '',
         quantity: 1,
-        category: 'GAZ'
+        category: 'GAZ',
+        isActive: true
     });
     const [stats, setStats] = useState(null);
     const [usersList, setUsersList] = useState([]);
@@ -71,8 +72,8 @@ const AdminDashboard = () => {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        const { name, value, type, checked } = e.target;
+        setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     };
 
     const handlePhotoUpload = (e) => {
@@ -114,7 +115,7 @@ const AdminDashboard = () => {
 
     const handleAddClick = () => {
         setEditingProductId(null);
-        setFormData({ title: '', description: '', price: '', quantity: 1, category: 'GAZ' });
+        setFormData({ title: '', description: '', price: '', quantity: 1, category: 'GAZ', isActive: true });
         setPhotos([]);
         setIsModalOpen(true);
     };
@@ -126,7 +127,8 @@ const AdminDashboard = () => {
             description: product.description,
             price: product.price,
             quantity: product.quantity,
-            category: product.category
+            category: product.category,
+            isActive: product.isActive !== false
         });
         setPhotos([]);
         setIsModalOpen(true);
@@ -134,7 +136,7 @@ const AdminDashboard = () => {
 
     const handleCancelEdit = () => {
         setEditingProductId(null);
-        setFormData({ title: '', description: '', price: '', quantity: 1, category: 'GAZ' });
+        setFormData({ title: '', description: '', price: '', quantity: 1, category: 'GAZ', isActive: true });
         setPhotos([]);
         setIsModalOpen(false);
     };
@@ -149,6 +151,7 @@ const AdminDashboard = () => {
         formDataObj.append('price', formData.price);
         formDataObj.append('quantity', formData.quantity);
         formDataObj.append('category', formData.category);
+        formDataObj.append('isActive', formData.isActive);
 
         photos.forEach(photo => {
             formDataObj.append('photos', photo);
@@ -523,6 +526,7 @@ const AdminDashboard = () => {
                                                     <th>Produit</th>
                                                     <th>Prix</th>
                                                     <th>Stock</th>
+                                                    <th>Statut</th>
                                                     <th style={{ textAlign: 'right' }}>Actions</th>
                                                 </tr>
                                             </thead>
@@ -544,6 +548,19 @@ const AdminDashboard = () => {
                                                         <td>
                                                             <span style={{ display: 'inline-block', padding: '4px 8px', borderRadius: '6px', background: product.quantity > 5 ? '#ecfdf5' : '#fef2f2', color: product.quantity > 5 ? '#10b981' : '#ef4444', fontSize: '13px', fontWeight: '600' }}>
                                                                 {product.quantity} u.
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span style={{
+                                                                display: 'inline-block',
+                                                                padding: '4px 10px',
+                                                                borderRadius: '100px',
+                                                                background: product.isActive !== false ? 'rgba(16, 185, 129, 0.15)' : 'rgba(100, 116, 139, 0.15)',
+                                                                color: product.isActive !== false ? '#10b981' : '#64748b',
+                                                                fontSize: '12px',
+                                                                fontWeight: '600'
+                                                            }}>
+                                                                {product.isActive !== false ? 'Actif' : 'En pause'}
                                                             </span>
                                                         </td>
                                                         <td style={{ textAlign: 'right' }}>
@@ -641,6 +658,20 @@ const AdminDashboard = () => {
                                                             <span style={{ fontSize: '14px', color: '#64748b', fontWeight: '500' }}>{photos.length > 0 ? `${photos.length} fichiers ajoutés` : 'Glissez vos fichiers ou cliquez'}</span>
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                                <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '20px 0' }}>
+                                                    <input 
+                                                        type="checkbox" 
+                                                        name="isActive" 
+                                                        id="isActiveForm"
+                                                        checked={formData.isActive} 
+                                                        onChange={handleInputChange}
+                                                        style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                                                    />
+                                                    <label htmlFor="isActiveForm" style={{ margin: 0, cursor: 'pointer', fontWeight: '600', color: 'var(--text-main)' }}>
+                                                        Article disponible à la vente (Actif)
+                                                    </label>
                                                 </div>
 
                                                 <div style={{ display: 'flex', gap: '12px', marginTop: '32px' }}>
