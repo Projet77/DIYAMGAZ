@@ -5,8 +5,8 @@ import Footer from '../components/Footer';
 import { useCart } from '../context/CartContext';
 
 const ZONES = [
-    { id: 'zone1', name: 'Zone 1 (Almadies 2, Kounoune)', price: 500 },
-    { id: 'zone2', name: 'Zone 2 (Diakhaye, Keur Massar)', price: 1000 },
+    { id: 'zone1', name: 'Zone 1 (Almadies 2, Kounoune)', price: 1000 },
+    { id: 'zone2', name: 'Zone 2 (Diakhaye, Keur Massar)', price: 1200 },
     { id: 'zone3', name: 'Zone 3 (Zack Mbao, Rufisque)', price: 1500 }
 ];
 
