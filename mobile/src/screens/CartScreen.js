@@ -46,7 +46,7 @@ export default function CartScreen({ navigation }) {
             <View key={itemId.toString()} style={styles.cartItem}>
                 <View style={styles.itemImageContainer}>
                     {displayImage ? (
-                        <Image source={{ uri: displayImage }} style={styles.itemImage} resizeMode="contain" />
+                        <Image source={{ uri: displayImage }} style={styles.itemImage} resizeMode="cover" />
                     ) : (
                         <Ionicons name="image-outline" size={30} color="#cbd5e1" />
                     )}

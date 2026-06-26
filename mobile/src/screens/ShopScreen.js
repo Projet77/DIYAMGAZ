@@ -61,7 +61,7 @@ export default function ShopScreen({ route, navigation }) {
                         <Image 
                             source={{ uri: displayImage }} 
                             style={styles.image} 
-                            resizeMode="contain"
+                            resizeMode="cover"
                         />
                     ) : (
                         <View style={styles.noImage}>

@@ -66,7 +66,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                         <Image 
                             source={{ uri: displayImage }} 
                             style={styles.image} 
-                            resizeMode="contain"
+                            resizeMode="cover"
                         />
                     ) : (
                         <View style={styles.noImage}>

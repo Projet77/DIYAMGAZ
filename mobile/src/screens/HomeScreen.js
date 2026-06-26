@@ -70,7 +70,7 @@ export default function HomeScreen({ navigation }) {
                         <Image 
                             source={{ uri: displayImage }} 
                             style={styles.cardImage} 
-                            resizeMode="contain"
+                            resizeMode="cover"
                         />
                     ) : (
                         <View style={styles.noImage}>
