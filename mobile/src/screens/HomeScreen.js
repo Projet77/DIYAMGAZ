@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
         borderColor: '#e2e8f0', elevation: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.05, shadowRadius: 4, overflow: 'hidden',
     },
-    imageContainer: { height: 130, backgroundColor: '#f1f5f9', justifyContent: 'center', alignItems: 'center', padding: 10 },
+    imageContainer: { height: 130, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', padding: 10 },
     cardImage: { width: '100%', height: '100%' },
     noImage: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: '#e2e8f0', borderRadius: 8 },
     noImageText: { color: '#94a3b8', fontWeight: 'bold', fontSize: 12 },

@@ -435,7 +435,7 @@ nav a:hover {
 
 .product-image-container {
   height: 240px;
-  background: var(--bg-tertiary);
+  background: transparent;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -867,7 +867,7 @@ footer {
 }
 
 .product-detail-visual {
-  background: var(--bg-tertiary);
+  background: transparent;
   padding: 60px 40px;
   display: flex;
   align-items: center;

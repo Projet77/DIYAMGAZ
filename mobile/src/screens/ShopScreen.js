@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         height: 140,
-        backgroundColor: '#f1f5f9',
+        backgroundColor: 'transparent',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 15,

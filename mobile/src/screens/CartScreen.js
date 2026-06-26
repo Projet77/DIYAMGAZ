@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4
     },
     itemImageContainer: {
-        width: 80, height: 80, backgroundColor: '#f1f5f9', borderRadius: 12,
+        width: 80, height: 80, backgroundColor: 'transparent', borderRadius: 12,
         justifyContent: 'center', alignItems: 'center', marginRight: 15
     },
     itemImage: { width: '80%', height: '80%' },

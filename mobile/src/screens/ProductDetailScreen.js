@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     backText: { fontSize: 16, color: '#64748b', fontWeight: '500' },
     
     imageSection: {
-        backgroundColor: '#f1f5f9',
+        backgroundColor: 'transparent',
         height: 350,
         justifyContent: 'center',
         alignItems: 'center',
